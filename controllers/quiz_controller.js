@@ -51,7 +51,6 @@ exports.check = function(req, res, next) {
 								   answer: answer });
 };
 
-
 // GET /quizzes/new
 exports.new = function(req, res, next) {
   var quiz = models.Quiz.build({question: "", answer: ""});
@@ -134,6 +133,9 @@ exports.destroy = function(req, res, next) {
 };
 
 
+// GET /author
+exports.author = function(req, res, next) {
 
-
+	res.render('author', {autor: "Daniel Fortun Sanchez" });
+}
 
