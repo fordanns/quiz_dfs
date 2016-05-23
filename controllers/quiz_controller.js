@@ -24,15 +24,22 @@ exports.index = function(req, res, next) {
 		search = search.join('%');
 		models.Quiz.findAll({order: 'question', where: {question: {$like : "%"+search+"%" }}})
 		.then(function(quizzes) {
-
-			res.render('quizzes/index.ejs', { quizzes: quizzes});
+			  if((req.params.format === undefined) || (req.params.format === 'html')) {
+          res.render('quizzes/index.ejs', { quizzes: quizzes});
+        } else if (req.params.format === 'json') {
+          res.send(JSON.stringify(quizzes));
+        }
 		})
 		.catch(function(error) { next(error) });
 
 	} else {
 		models.Quiz.findAll()
 		.then(function(quizzes) {
-			res.render('quizzes/index.ejs', { quizzes: quizzes});
+			if((req.params.format === undefined) || (req.params.format === 'html')) {
+          res.render('quizzes/index.ejs', { quizzes: quizzes});
+        } else if (req.params.format === 'json') {
+          res.send(JSON.stringify(quizzes));
+        }
 		})
 		.catch(function(error) { next(error) });
 	}
@@ -44,8 +51,11 @@ exports.show = function(req, res, next) {
 
 	var answer = req.query.answer || '';
 
-	res.render('quizzes/show', {quiz: req.quiz,
-								answer: answer});
+	if((req.params.format === undefined) || (req.params.format === 'html')) {
+    res.render('quizzes/show', {quiz: req.quiz, answer: answer});
+  } else if (req.params.format === 'json') {
+    res.send(JSON.stringify(req.quiz));
+  }
 };
 
 
