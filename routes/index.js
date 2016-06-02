@@ -15,7 +15,6 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
-
 // Autoload de parametros
 router.param('quizId', quizController.load);  // autoload :quizId
 router.param('userId', userController.load);  // autoload :userId
@@ -44,8 +43,9 @@ router.delete('/users/:userId(\\d+)',   sessionController.loginRequired,
 										userController.destroy);  // borrar cuenta
 
 // Definición de rutas de /quizzes
-router.get('/quizzes',                     	quizController.index);
-router.get('/quizzes/:quizId(\\d+)',       	quizController.show);
+
+router.get('/quizzes.:format?',            quizController.index);
+router.get('/quizzes/:quizId(\\d+).:format?',       quizController.show)
 router.get('/quizzes/:quizId(\\d+)/check', 	quizController.check);
 router.get('/quizzes/new',                 	sessionController.loginRequired, 
 											quizController.new);
@@ -62,6 +62,10 @@ router.put('/quizzes/:quizId(\\d+)',       	sessionController.loginRequired,
 router.delete('/quizzes/:quizId(\\d+)',    	sessionController.loginRequired, 
 											quizController.ownershipRequired, 
 											quizController.destroy);
+router.get('/author',    quizController.author);
+router.get('/quizzes/:quizId(\\d+)/comments/new',  commentController.new);
+router.post('/quizzes/:quizId(\\d+)/comments',     commentController.create);
+
 
 // Definición de rutas de comentarios
 router.get('/quizzes/:quizId(\\d+)/comments/new',  sessionController.loginRequired, 

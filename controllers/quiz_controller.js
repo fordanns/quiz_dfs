@@ -42,13 +42,30 @@ exports.ownershipRequired = function(req, res, next){
 
 // GET /quizzes
 exports.index = function(req, res, next) {
-	models.Quiz.findAll({ include: [ models.Attachment ] })
+	if(req.query.search !== undefined){
+		var search = req.query.search.split(' ');
+		search = search.join('%');
+		models.Quiz.findAll({include: [ models.Attachment ], order: 'question', where: {question: {$like : "%"+search+"%" }}})
 		.then(function(quizzes) {
-			res.render('quizzes/index.ejs', { quizzes: quizzes});
+			  if((req.params.format === undefined) || (req.params.format === 'html')) {
+          res.render('quizzes/index.ejs', { quizzes: quizzes});
+        } else if (req.params.format === 'json') {
+          res.send(JSON.stringify(quizzes));
+        }
 		})
-		.catch(function(error) {
-			next(error);
-		});
+		.catch(function(error) { next(error) });
+
+	} else {
+		models.Quiz.findAll()
+		.then(function(quizzes) {
+			if((req.params.format === undefined) || (req.params.format === 'html')) {
+          res.render('quizzes/index.ejs', { quizzes: quizzes});
+        } else if (req.params.format === 'json') {
+          res.send(JSON.stringify(quizzes));
+        }
+		})
+		.catch(function(error) { next(error) });
+	}
 };
 
 
@@ -57,8 +74,11 @@ exports.show = function(req, res, next) {
 
 	var answer = req.query.answer || '';
 
-	res.render('quizzes/show', {quiz: req.quiz,
-								answer: answer});
+	if((req.params.format === undefined) || (req.params.format === 'html')) {
+    res.render('quizzes/show', {quiz: req.quiz, answer: answer});
+  } else if (req.params.format === 'json') {
+    res.send(JSON.stringify(req.quiz));
+  }
 };
 
 
@@ -73,7 +93,6 @@ exports.check = function(req, res, next) {
 								   result: result, 
 								   answer: answer });
 };
-
 
 // GET /quizzes/new
 exports.new = function(req, res, next) {
@@ -260,6 +279,9 @@ exports.destroy = function(req, res, next) {
 };
 
 
+// GET /author
+exports.author = function(req, res, next) {
 
-
+	res.render('author', {autor: "Daniel Fortun Sanchez" });
+}
 

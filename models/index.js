@@ -21,6 +21,7 @@ if (!process.env.DATABASE_URL) {
 }
 
 var sequelize = new Sequelize(url, 
+
 	 						  { storage: storage,
 				              	omitNull: true 
 				              });
