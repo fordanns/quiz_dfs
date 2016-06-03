@@ -23,13 +23,15 @@ exports.new = function(req, res, next) {
   var comment = models.Comment.build({text: ""});
 
   res.render('comments/new', { comment: comment, 
-  	                           quiz: req.quiz
+  	                           quiz: req.quiz,
+                               AuthorId: authorId
   	                         });
 };
 
 
 // POST /quizes/:quizId/comments
 exports.create = function(req, res, next) {
+  var authorId = req.session.user && req.session.user.id || 0;
   var comment = models.Comment.build(
       { text:   req.body.comment.text,          
         QuizId: req.quiz.id

@@ -75,7 +75,9 @@ exports.show = function(req, res, next) {
 	var answer = req.query.answer || '';
 
 	if((req.params.format === undefined) || (req.params.format === 'html')) {
-    res.render('quizzes/show', {quiz: req.quiz, answer: answer});
+    models.User.findAll().then(function(users){
+      res.render('quizzes/show', {quiz: req.quiz, answer: answer, users: users});
+    });
   } else if (req.params.format === 'json') {
     res.send(JSON.stringify(req.quiz));
   }
