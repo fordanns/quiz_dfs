@@ -285,5 +285,9 @@ exports.destroy = function(req, res, next) {
 exports.author = function(req, res, next) {
 
 	res.render('author', {autor: "Daniel Fortun Sanchez" });
-}
+};
+// GET /sugerencias
+exports.sugerencias = function(req, res, next) {
 
+  res.render('sugerencias');
+};

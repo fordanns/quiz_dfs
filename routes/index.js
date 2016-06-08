@@ -63,6 +63,7 @@ router.delete('/quizzes/:quizId(\\d+)',    	sessionController.loginRequired,
 											quizController.ownershipRequired, 
 											quizController.destroy);
 router.get('/author',    quizController.author);
+router.get('/sugerencias',    quizController.sugerencias);
 router.get('/quizzes/:quizId(\\d+)/comments/new',  commentController.new);
 router.post('/quizzes/:quizId(\\d+)/comments',     commentController.create);
 
